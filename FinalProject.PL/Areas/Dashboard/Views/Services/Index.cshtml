@@ -1,0 +1,128 @@
+﻿@model IEnumerable<ServicesVM>
+@section style{
+    <link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/buttons/3.1.2/css/buttons.dataTables.min.css" rel="stylesheet"/>
+}
+
+@section Header{
+    <h1>Index</h1>
+}
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Show all services</h3>
+        </div>
+
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                       
+                    </tr>
+                </thead>
+               <tbody>
+                   @foreach(var item in Model){
+<tr>
+    <td>@item.Name</td>
+   <td>@item.IsDeleted</td>
+   <td>
+        <a asp-controller="Services" asp-action="Edit" asp-route-id="@item.Id"  class="btn btn-warning"> Edit</a>
+       <a  data-id="@item.Id"  href="javascript:void(0)"  class="btn btn-danger  delete-btn">Delete</a>
+        <a asp-controller="Services" asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"> Details</a>
+   </td>
+</tr>
+
+                   }
+               </tbody>
+            </table>
+        </div>
+
+        
+    </div>
+
+  
+
+</div>
+@section scripts{
+
+    <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.min.js"> </script>
+   <script src=" https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.12/pdfmake.min.js" integrity="sha512-axXaF5grZBaYl7qiM6OMHgsgVXdSLxqq0w7F4CQxuFyrcPmn0JfnqsOtYHUun80g6mRRdvJDrTCyL8LQqBOt/Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.12/vfs_fonts.js" integrity="sha512-nNkHPz+lD0Wf0eFGO0ZDxr+lWiFalFutgVeGkPdVgrG4eXDYUnhfEj9Zmg1QkrJFLC0tGs8ZExyU/1mjs4j93w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.print.min.js"></script>
+
+    <script>
+        new DataTable('table', {
+            layout: {
+                topStart: {
+                    buttons: [
+                        'copy', 'pdf', 'excel'
+                    ]
+                }
+            }
+        });
+        const elements = document.querySelectorAll(".delete-btn");
+        elements.forEach(function (button) {
+            button.addEventListener("click",async () => {
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: "btn btn-success",
+                        cancelButton: "btn btn-danger"
+                    },
+                    buttonsStyling: false
+                });
+                swalWithBootstrapButtons.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                  
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel!",
+                    reverseButtons: true
+                }).then(async(result) => {
+                    if (result.isConfirmed) {
+                        const id = button.dataset.id;
+                        const response = await fetch(`/Dashboard/Services/DeleteConfirmed/${id}`, {
+                            method: 'POST',
+                            Headers: {
+                                "content-type": "application/json"
+                            }
+                        }
+                        );
+                        const data = await response.json();
+                        if (response.ok) {
+                           
+                            $(button).closest("tr").remove();
+                        }
+                        swalWithBootstrapButtons.fire({
+                            title: "Deleted!",
+                            text: "Your file has been deleted.",
+                            icon: "success"
+                        });
+                    } else if (
+                        /* Read more about handling dismissals below */
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire({
+                            title: "Cancelled",
+                            text: "Your imaginary file is safe :)",
+                            icon: "error"
+                        });
+                    }
+                });
+              
+              
+            })
+        })
+    </script>
+ 
+
+}

@@ -1,0 +1,44 @@
+﻿@model ServiceFormVM
+
+@section Header {
+    services
+}
+
+<div class="col-md-12">
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Update service</h3>
+        </div>
+
+
+        <form asp-controller="Services" asp-action="Edit" enctype="multipart/form-data">
+            <div class="card-body">
+                <input type="hidden" asp-for="Id"/>
+                <input type="hidden" asp-for="ImageName"/>
+                <div class="form-group">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" placeholder="Update Service Name">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description"></label>
+                    <input asp-for="Description" class="form-control" placeholder="Enter Service Description">
+                </div>
+                <div class="form-group">
+                    <label asp-for="IsDeleted"></label>
+                    <input asp-for="IsDeleted" >
+                    <span>@(Model.IsDeleted ? "Deleted" : "Acrive")</span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Image"></label>
+                    <input asp-for="Image" class="form-control-file">
+                </div>
+
+            </div>
+
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Update</button>
+              
+            </div>
+        </form>
+    </div>
+</div>

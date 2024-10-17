@@ -1,6 +1,8 @@
-using FinalProject.PL.Data;
+using FinalProject.DAL.Data;
+using FinalProject.PL.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace FinalProject.PL
 {
@@ -19,7 +21,7 @@ namespace FinalProject.PL
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

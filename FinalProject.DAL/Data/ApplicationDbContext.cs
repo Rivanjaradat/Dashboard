@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using FinalProject.DAL.Data.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace FinalProject.PL.Data
+namespace FinalProject.DAL.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
@@ -9,5 +10,7 @@ namespace FinalProject.PL.Data
             : base(options)
         {
         }
+        public DbSet<Service> Services { get; set; }
+
     }
 }

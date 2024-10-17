@@ -1,0 +1,20 @@
+﻿@model ServiceDetailsVM
+@section Header{
+  Service  Details
+}
+<div class="col-md-12">
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Details for  @Model.Name</h3>
+        </div>
+
+
+        <ul>
+            <li>Description :@Model.Description</li>
+            <li>status :@(Model.IsDeleted?"Deleted":"Active")</li>
+            <li>Created :@Model.CreatedAt</li>
+            <li>Image :<img src="~/Files/images/@Model.ImageName" /></li>
+           
+        </ul>
+    </div>
+</div>
